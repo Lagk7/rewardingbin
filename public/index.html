@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECO BIN — Smart Eco Rewarding Platform | 10g = 1 Point</title>
+  <meta name="description" content="Eco Rewarding Bin website that calculates garbage weight in grams and rewards eco points (10 grams = 1 point). Track average weight, view leaderboard, and claim rewards.">
+
+  <!-- Google Fonts: Outfit (Headings) and Inter (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Canvas Confetti for Celebration Animation -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== SITE HEADER ==================== -->
+  <header class="site-header">
+    <div class="header-container">
+      
+      <!-- Brand Logo -->
+      <a href="#home" class="brand-logo" id="brand-logo-link">
+        <div class="logo-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+          </svg>
+        </div>
+        <div>
+          <span class="logo-text">ECO BIN</span>
+          <span class="logo-sub">REWARD SYSTEM</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#home" class="nav-link active" data-view="home" id="nav-home">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Home</span>
+          </a></li>
+          <li><a href="#dashboard" class="nav-link" data-view="dashboard" id="nav-dashboard">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Dashboard</span>
+          </a></li>
+          <li><a href="#scale" class="nav-link" data-view="scale" id="nav-scale">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7 21v-4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4"/></svg>
+            <span>Garbage Scale</span>
+          </a></li>
+          <li><a href="#leaderboard" class="nav-link" data-view="leaderboard" id="nav-leaderboard">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            <span>Leaderboard</span>
+          </a></li>
+          <li><a href="#history" class="nav-link" data-view="history" id="nav-history">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+            <span>History</span>
+          </a></li>
+          <li><a href="#guide" class="nav-link" data-view="guide" id="nav-guide">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+            <span>Eco Guide</span>
+          </a></li>
+        </ul>
+      </nav>
+
+      <!-- Header Actions: Reward Pill & Auth -->
+      <div class="header-actions">
+        <!-- Live Reward Rule Pill -->
+        <div class="bin-status-pill" id="header-reward-pill" title="Every 10 grams equals 1 Eco Point!">
+          <span class="pulse-dot"></span>
+          <span>10g = 1 Eco Point</span>
+        </div>
+
+        <!-- Auth Actions / User Chip -->
+        <div id="auth-header-container">
+          <button class="btn btn-primary btn-sm" id="btn-open-login">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Sign In
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT CONTAINER ==================== -->
+  <main class="main-wrapper">
+
+    <!-- ==================== 1. HOME VIEW ==================== -->
+    <section id="view-home" class="app-view active-view">
+      
+      <!-- Logged-in Quick User Overview Banner (Shown when user is authenticated) -->
+      <div id="home-user-banner" style="display: none;" class="dashboard-welcome-banner">
+        <div class="user-welcome-info">
+          <div class="user-big-avatar" id="home-user-avatar">🌱</div>
+          <div>
+            <div class="user-rank-tag" id="home-user-badge">Eco Recycler</div>
+            <h2 class="user-welcome-title" id="home-user-name">Welcome Back!</h2>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">
+              Your current average deposit is <strong style="color: var(--emerald-400);" id="home-user-avg-highlight">0.0 g</strong>. Deposit waste to earn points automatically!
+            </p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <a href="#scale" class="btn btn-primary" id="btn-home-go-scale">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+            Open Garbage Scale
+          </a>
+          <a href="#dashboard" class="btn btn-secondary" id="btn-home-go-dash">View Dashboard</a>
+        </div>
+      </div>
+
+      <!-- Hero Card -->
+      <div class="hero-card">
+        <div class="hero-grid">
+          <div>
+            <div class="hero-badge">
+              <span class="pulse-dot"></span>
+              🌱 Smart Eco Rewarding Platform • 10g = 1 Point
+            </div>
+            <h1 class="hero-title">
+              Turn Recycled Waste into <span>Eco Points</span> Instantly.
+            </h1>
+            <p class="hero-lead">
+              Every gram of recycled waste counts. Enter your recyclable garbage weight in grams, automatically earn <strong>1 Eco Point for every 10 grams</strong>, track your average contribution, and climb the Eco Champions Leaderboard!
+            </p>
+            <div class="hero-actions">
+              <a href="#scale" class="btn btn-primary btn-lg" id="btn-hero-scale">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7 21v-4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4"/></svg>
+                Launch Garbage Scale
+              </a>
+              <button class="btn btn-secondary btn-lg" id="btn-hero-demo-login">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Quick Demo Login
+              </button>
+            </div>
+          </div>
+
+          <!-- Hero Interactive Scale Preview Widget -->
+          <div class="hero-scale-preview">
+            <div class="preview-chip-header">
+              <span>SMART ECO SCALE</span>
+              <span id="hero-scale-badge" class="stability-badge stable">READY</span>
+            </div>
+            <div class="live-dial-box">
+              <div class="live-dial-num" id="hero-live-weight">0.0</div>
+              <div class="live-dial-unit">GRAMS (g)</div>
+            </div>
+            <div class="live-reward-calc">
+              <span>Automatic Reward:</span>
+              <span class="calc-rule" id="hero-points-preview">0 pts (10g = 1pt)</span>
+            </div>
+            <!-- Quick Chips on Hero -->
+            <div style="display: flex; gap: 0.4rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap;">
+              <button class="chip-btn hero-quick-chip" data-weight="80">🍶 80g</button>
+              <button class="chip-btn hero-quick-chip" data-weight="150">🥤 150g</button>
+              <button class="chip-btn hero-quick-chip" data-weight="350">🫙 350g</button>
+              <button class="chip-btn hero-quick-chip" data-weight="500">📦 500g</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Highlight Cards -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-box">⚖️</div>
+          <h3 class="feature-title">Smart Gram-to-Point Scale</h3>
+          <p class="feature-desc">Input exact garbage weights in grams or choose quick waste categories like Plastic, Paper, Metal, and Glass.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-box">📊</div>
+          <h3 class="feature-title">Average Contribution Tracking</h3>
+          <p class="feature-desc">The system computes your lifetime average weight deposited per visit, encouraging consistent eco-friendly habits.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-box">🏆</div>
+          <h3 class="feature-title">Competitive Leaderboard</h3>
+          <p class="feature-desc">Compete with friends and fellow recyclers. Climb the ranks from Bronze Recycler to Platinum Planet Saver!</p>
+        </div>
+      </div>
+
+      <!-- Recent Community Activity Strip -->
+      <div class="bin-connect-card">
+        <div class="card-title-row">
+          <h3 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-400)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Live Eco Bin Recycling Feed
+          </h3>
+          <span style="font-size: 0.8rem; color: var(--emerald-400); font-weight: 600;">● Real-time Activity</span>
+        </div>
+        <div class="activity-feed-list" id="home-community-feed">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== 2. USER DASHBOARD VIEW ==================== -->
+    <section id="view-dashboard" class="app-view">
+      
+      <!-- Header -->
+      <div class="section-header">
+        <div>
+          <span class="section-tag">User Overview</span>
+          <h1 class="section-title">My Eco Dashboard</h1>
+          <p class="section-desc">Track your recycled weight, average waste deposit, and points earned in real-time.</p>
+        </div>
+        <div>
+          <a href="#scale" class="btn btn-primary" id="btn-dash-deposit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            Record Waste Deposit
+          </a>
+        </div>
+      </div>
+
+      <!-- Welcome Banner -->
+      <div class="dashboard-welcome-banner">
+        <div class="user-welcome-info">
+          <div class="user-big-avatar" id="dash-user-avatar">🌱</div>
+          <div>
+            <div class="user-rank-tag" id="dash-user-rank-badge">Rank #1 • Champion</div>
+            <h2 class="user-welcome-title" id="dash-user-welcome-name">Hello, Recycler!</h2>
+            <p style="color: var(--text-secondary); font-size: 0.92rem;" id="dash-user-email">user@ecobin.com</p>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px;">Account Status</div>
+          <div style="font-size: 1.1rem; font-weight: 700; color: var(--emerald-400);" id="dash-user-bin-status">Active Eco Recycler</div>
+        </div>
+      </div>
+
+      <!-- 4 Core Metric Cards -->
+      <div class="stats-grid">
+        
+        <!-- Total Points -->
+        <div class="stat-card stat-card-highlight">
+          <div class="stat-top">
+            <span class="stat-label">Total Reward Points</span>
+            <div class="stat-icon">🌟</div>
+          </div>
+          <div class="stat-value" id="dash-stat-points">0</div>
+          <div class="stat-subtext">Rule: 10g = 1 Eco Point</div>
+          <span class="stat-badge">Eco Currency</span>
+        </div>
+
+        <!-- Total Garbage Recycled -->
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Total Recycled Weight</span>
+            <div class="stat-icon">⚖️</div>
+          </div>
+          <div class="stat-value">
+            <span id="dash-stat-weight-kg">0.00</span><span class="stat-unit">kg</span>
+          </div>
+          <div class="stat-subtext"><span id="dash-stat-weight-g">0</span> grams total diverted from landfills</div>
+          <span class="stat-badge">Clean Planet</span>
+        </div>
+
+        <!-- Average Weight per Deposit (CRITICAL REQUIREMENT) -->
+        <div class="stat-card stat-card-highlight">
+          <div class="stat-top">
+            <span class="stat-label">Average Weight Put</span>
+            <div class="stat-icon">📊</div>
+          </div>
+          <div class="stat-value">
+            <span id="dash-stat-avg-g">0.0</span><span class="stat-unit">g</span>
+          </div>
+          <div class="stat-subtext">Average garbage put by you per visit</div>
+          <span class="stat-badge" id="dash-stat-avg-badge">Consistent Hero</span>
+        </div>
+
+        <!-- Total Trips / Deposits -->
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Total Deposits</span>
+            <div class="stat-icon">♻️</div>
+          </div>
+          <div class="stat-value" id="dash-stat-trips">0</div>
+          <div class="stat-subtext">Lifetime recycling interactions</div>
+          <span class="stat-badge">Eco Habits</span>
+        </div>
+
+      </div>
+
+      <!-- Dashboard Layout: Environmental Impact & Recent Activity -->
+      <div class="dashboard-layout-grid">
+        
+        <!-- Left: Environmental Impact Metrics -->
+        <div class="bin-connect-card">
+          <div class="card-title-row">
+            <h3 class="card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-400)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              My Environmental Impact
+            </h3>
+            <span class="stability-badge stable">VERIFIED IMPACT</span>
+          </div>
+
+          <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            Here is the real-world positive environmental impact achieved through your waste deposits:
+          </p>
+
+          <div class="eco-impact-grid">
+            <div class="eco-impact-box">
+              <div class="impact-num" id="dash-impact-landfill">0.00 kg</div>
+              <div class="impact-label">Landfill Diverted</div>
+            </div>
+            <div class="eco-impact-box">
+              <div class="impact-num" id="dash-impact-co2">0.0 kg</div>
+              <div class="impact-label">CO2 Saved</div>
+            </div>
+            <div class="eco-impact-box">
+              <div class="impact-num" id="dash-impact-trees">0.0</div>
+              <div class="impact-label">Tree Days Equiv.</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+            <a href="#scale" class="btn btn-primary btn-sm">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              Record Another Deposit
+            </a>
+            <a href="#leaderboard" class="btn btn-secondary btn-sm">Check Leaderboard</a>
+          </div>
+        </div>
+
+        <!-- Right: My Recent Activity -->
+        <div class="bin-connect-card">
+          <div class="card-title-row">
+            <h3 class="card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-400)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+              My Recent Deposits
+            </h3>
+            <a href="#history" style="font-size: 0.82rem; color: var(--emerald-400);">View All &rarr;</a>
+          </div>
+
+          <div class="activity-feed-list" id="dash-user-deposits-list">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================== 3. GARBAGE WEIGHT & MANUAL SCALE VIEW ==================== -->
+    <section id="view-scale" class="app-view">
+      
+      <div class="section-header">
+        <div>
+          <span class="section-tag">Interactive Scale</span>
+          <h1 class="section-title">Garbage Weight & Auto-Reward</h1>
+          <p class="section-desc">Enter or select garbage weight in grams. Points are calculated automatically (10 grams = 1 point).</p>
+        </div>
+      </div>
+
+      <!-- Guest Warning Banner (Shown if browsing without login) -->
+      <div class="guest-notice-banner" id="scale-guest-banner" style="display: none;">
+        <div>
+          <strong style="color: #fff;">💡 Browsing as Guest:</strong>
+          <span style="color: var(--text-secondary); font-size: 0.9rem;">Sign in to save your deposit and add points to your leaderboard profile!</span>
+        </div>
+        <button class="btn btn-primary btn-sm" id="btn-guest-quick-demo">
+          ⚡ Quick 1-Click Demo Sign In
+        </button>
+      </div>
+
+      <div class="weight-page-grid">
+        
+        <!-- Left: Digital Scale Terminal -->
+        <div class="scale-terminal-card">
+          <div class="scale-header-bar">
+            <div class="scale-id-chip">
+              <span class="pulse-dot"></span>
+              MANUAL ECO SCALE
+            </div>
+            <div class="stability-badge" id="scale-stability-badge">
+              ENTER WEIGHT (G)
+            </div>
+          </div>
+
+          <!-- Waste Category Selector -->
+          <div style="margin-bottom: 0.5rem;">
+            <label class="form-label">Select Waste Category:</label>
+            <div class="category-pills-grid">
+              <button class="category-pill-btn active" data-category="Plastic" data-weight="80">
+                <span class="category-pill-icon">🍶</span>
+                <span>Plastic (~80g)</span>
+              </button>
+              <button class="category-pill-btn" data-category="Metal & Cans" data-weight="150">
+                <span class="category-pill-icon">🥤</span>
+                <span>Metal (~150g)</span>
+              </button>
+              <button class="category-pill-btn" data-category="Paper & Cardboard" data-weight="400">
+                <span class="category-pill-icon">📦</span>
+                <span>Paper (~400g)</span>
+              </button>
+              <button class="category-pill-btn" data-category="Glass" data-weight="350">
+                <span class="category-pill-icon">🫙</span>
+                <span>Glass (~350g)</span>
+              </button>
+              <button class="category-pill-btn" data-category="Food / Organic" data-weight="250">
+                <span class="category-pill-icon">🍎</span>
+                <span>Organic (~250g)</span>
+              </button>
+              <button class="category-pill-btn" data-category="E-Waste" data-weight="500">
+                <span class="category-pill-icon">🔋</span>
+                <span>E-Waste (~500g)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Digital Weight Display Box -->
+          <div class="digital-scale-box">
+            
+            <!-- Animated Gauge Bar -->
+            <div class="scale-gauge-bar">
+              <div class="scale-gauge-fill" id="scale-gauge-fill" style="width: 0%;"></div>
+            </div>
+
+            <!-- Big Weight Display -->
+            <div class="digital-weight-value" id="scale-weight-display">0.0</div>
+            <div class="digital-weight-unit">GRAMS (g)</div>
+
+            <!-- Real-time Averaging & Point Calculator Preview -->
+            <div class="live-averaging-stats">
+              <div class="avg-stat-item">
+                Kilograms: <span id="scale-avg-display">0.00 kg</span>
+              </div>
+              <div class="avg-stat-item">
+                Auto Reward: <span id="scale-points-preview" style="color: var(--emerald-400);">0 Points</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Quick-Add Weight Chips -->
+          <div>
+            <label class="form-label">Quick Add Grams to Scale:</label>
+            <div class="quick-add-chips">
+              <button class="chip-btn" data-add="20">+20g</button>
+              <button class="chip-btn" data-add="50">+50g</button>
+              <button class="chip-btn" data-add="100">+100g</button>
+              <button class="chip-btn" data-add="250">+250g</button>
+              <button class="chip-btn" data-add="500">+500g</button>
+              <button class="chip-btn" data-add="1000">+1kg</button>
+              <button class="chip-btn chip-btn-clear" id="btn-scale-tare">✕ Reset</button>
+            </div>
+          </div>
+
+          <!-- Scale Controls -->
+          <div class="scale-controls-row">
+            <button class="btn btn-primary btn-record-deposit" id="btn-scale-record" style="width: 100%;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Deposit Waste & Award Points
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Right: Calculation Rule, Direct Entry & Quick Presets -->
+        <div>
+          
+          <!-- Formula Card -->
+          <div class="formula-card">
+            <span class="section-tag">Reward Rule</span>
+            <div class="formula-highlight">
+              ⚖️ 10 Grams = 1 Point
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-secondary);">
+              Formula: <code>Points = Floor(Weight in Grams ÷ 10)</code>
+            </p>
+          </div>
+
+          <!-- Direct Input Card -->
+          <div class="side-tool-card">
+            <h3 class="card-title" style="margin-bottom: 1rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-400)" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              Direct Weight Input
+            </h3>
+            <form id="form-manual-deposit">
+              <div class="form-group">
+                <label class="form-label" for="manual-weight-input">Enter Exact Weight (Grams):</label>
+                <input type="number" step="0.1" min="1" class="form-input" id="manual-weight-input" placeholder="e.g. 240.0" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="manual-note-input">Item Description / Note:</label>
+                <input type="text" class="form-input" id="manual-note-input" placeholder="e.g. Plastic bottles & caps">
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 0.85rem; color: var(--text-secondary);">Calculated Reward:</span>
+                <span style="font-size: 1.15rem; font-weight: 700; color: var(--emerald-400);" id="manual-points-calc">0 Points</span>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;" id="btn-submit-manual">
+                Save & Claim Points
+              </button>
+            </form>
+          </div>
+
+          <!-- Quick Test Items -->
+          <div class="side-tool-card">
+            <h3 class="card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-400)" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Quick Test Recyclables
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
+              Click any item below to immediately load its typical weight onto the scale:
+            </p>
+            <div class="quick-drop-grid">
+              <button class="quick-drop-btn" data-weight="80" data-item="Plastic Bottle">
+                <span class="quick-drop-icon">🍶</span>
+                <span>Plastic Bottle</span>
+                <span class="quick-drop-weight">80g (8 pts)</span>
+              </button>
+              <button class="quick-drop-btn" data-weight="150" data-item="Soda Can">
+                <span class="quick-drop-icon">🥤</span>
+                <span>Soda Can</span>
+                <span class="quick-drop-weight">150g (15 pts)</span>
+              </button>
+              <button class="quick-drop-btn" data-weight="350" data-item="Glass Jar">
+                <span class="quick-drop-icon">🫙</span>
+                <span>Glass Jar</span>
+                <span class="quick-drop-weight">350g (35 pts)</span>
+              </button>
+              <button class="quick-drop-btn" data-weight="500" data-item="Cardboard Box">
+                <span class="quick-drop-icon">📦</span>
+                <span>Cardboard Box</span>
+                <span class="quick-drop-weight">500g (50 pts)</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================== 4. LEADERBOARD VIEW ==================== -->
+    <section id="view-leaderboard" class="app-view">
+      
+      <div class="section-header">
+        <div>
+          <span class="section-tag">Global Rankings</span>
+          <h1 class="section-title">Eco Champions Leaderboard</h1>
+          <p class="section-desc">Celebrate top recyclers in the community ranked by total points and recycled weight.</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-secondary btn-sm" id="btn-refresh-leaderboard">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Podium (Top 3) -->
+      <div class="podium-container" id="leaderboard-podium">
+        <!-- Filled dynamically by app.js -->
+      </div>
+
+      <!-- Ranked Table -->
+      <div class="leaderboard-table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 80px;">Rank</th>
+                <th>Recycler Name</th>
+                <th>Total Points</th>
+                <th>Recycled Weight</th>
+                <th>Average / Trip</th>
+                <th>Trips</th>
+                <th>Tier Badge</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-table-body">
+              <!-- Populated dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== 5. REWARD HISTORY VIEW ==================== -->
+    <section id="view-history" class="app-view">
+      
+      <div class="section-header">
+        <div>
+          <span class="section-tag">Audit Log</span>
+          <h1 class="section-title">My Reward History</h1>
+          <p class="section-desc">Complete record of every garbage weight measured and points earned.</p>
+        </div>
+        <div>
+          <button class="btn btn-secondary btn-sm" id="btn-export-history">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- History Summary Bar -->
+      <div class="history-stats-bar">
+        <div class="history-summary-box">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Lifetime Points</div>
+          <div class="num" id="history-stat-points">0</div>
+        </div>
+        <div class="history-summary-box">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Total Recycled</div>
+          <div class="num"><span id="history-stat-kg">0.00</span> <span style="font-size: 1rem; color: var(--text-secondary);">kg</span></div>
+        </div>
+        <div class="history-summary-box">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Average per Trip</div>
+          <div class="num"><span id="history-stat-avg">0.0</span> <span style="font-size: 1rem; color: var(--text-secondary);">g</span></div>
+        </div>
+        <div class="history-summary-box">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Total Deposits</div>
+          <div class="num" id="history-stat-count">0</div>
+        </div>
+      </div>
+
+      <!-- History Data Table -->
+      <div class="leaderboard-table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>Category / Notes</th>
+                <th>Garbage Weight (g)</th>
+                <th>Average Weight (g)</th>
+                <th>Points Earned</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body">
+              <!-- Populated dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== 6. ECO GUIDE VIEW (Replaced Arduino Hub) ==================== -->
+    <section id="view-guide" class="app-view">
+      
+      <div class="section-header">
+        <div>
+          <span class="section-tag">Educational Hub</span>
+          <h1 class="section-title">Eco Rewards & Waste Guide</h1>
+          <p class="section-desc">Learn how points are calculated, best recycling practices, and your environmental impact.</p>
+        </div>
+      </div>
+
+      <div class="hardware-hero-card">
+        <h2 style="font-size: 1.8rem; margin-bottom: 0.75rem;">How Eco Rewards Work</h2>
+        <p style="color: var(--text-secondary); max-width: 700px; margin-bottom: 1.5rem;">
+          Our platform rewards community members for diverting waste from landfills into recycling streams. Every 10 grams of recyclable material earns you 1 Eco Point.
+        </p>
+
+        <div class="pinout-grid">
+          <div class="pinout-card">
+            <h3 style="font-size: 1.15rem; margin-bottom: 0.75rem; color: var(--emerald-400);">
+              ⚖️ The 10g = 1 Point Formula
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+              Points are calculated simply and transparently:
+              <br><br>
+              • <strong>80 grams</strong> (e.g. plastic bottle) = <strong>8 Points</strong><br>
+              • <strong>150 grams</strong> (e.g. soda can) = <strong>15 Points</strong><br>
+              • <strong>350 grams</strong> (e.g. glass bottle) = <strong>35 Points</strong><br>
+              • <strong>1,000 grams (1 kg)</strong> = <strong>100 Points</strong>
+            </p>
+          </div>
+
+          <div class="pinout-card">
+            <h3 style="font-size: 1.15rem; margin-bottom: 0.75rem; color: var(--emerald-400);">
+              🏅 Eco Champion Tiers
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+              Climb the tiers as your lifetime points increase:
+              <br><br>
+              • <strong>🥉 Bronze Recycler:</strong> 0 – 29 Points<br>
+              • <strong>🥈 Silver Recycler:</strong> 30 – 79 Points<br>
+              • <strong>🥇 Gold Eco Champion:</strong> 80 – 149 Points<br>
+              • <strong>🏆 Platinum Planet Saver:</strong> 150+ Points
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==================== MOBILE BOTTOM NAVIGATION ==================== -->
+  <div class="mobile-bottom-nav">
+    <div class="mobile-nav-grid">
+      <a href="#home" class="mobile-nav-item active" data-view="home">
+        <span class="mobile-nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="#dashboard" class="mobile-nav-item" data-view="dashboard">
+        <span class="mobile-nav-icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+      <a href="#scale" class="mobile-nav-item" data-view="scale">
+        <span class="mobile-nav-icon">⚖️</span>
+        <span>Scale</span>
+      </a>
+      <a href="#leaderboard" class="mobile-nav-item" data-view="leaderboard">
+        <span class="mobile-nav-icon">🏆</span>
+        <span>Ranks</span>
+      </a>
+      <a href="#history" class="mobile-nav-item" data-view="history">
+        <span class="mobile-nav-icon">📜</span>
+        <span>History</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ==================== AUTH MODAL (LOGIN & REGISTER) ==================== -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="auth-modal-card">
+      <button class="modal-close-btn" id="btn-close-auth-modal" aria-label="Close modal">&times;</button>
+      
+      <!-- Logo in Modal -->
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+        <div class="logo-icon-wrap" style="width: 36px; height: 36px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/></svg>
+        </div>
+        <h2 style="font-size: 1.4rem;">Eco Bin Account</h2>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-login" data-tab="login">Sign In</button>
+        <button class="auth-tab-btn" id="tab-register" data-tab="register">Create Account</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="form-login">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email Address</label>
+          <input type="email" class="form-input" id="login-email" placeholder="e.g. demo@ecobin.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input type="password" class="form-input" id="login-password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" id="btn-submit-login">
+          Sign In
+        </button>
+        <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 0.75rem;" id="btn-quick-demo-modal">
+          ⚡ Quick 1-Click Demo Login
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="form-register" style="display: none;">
+        <div class="form-group">
+          <label class="form-label" for="reg-name">Your Full Name</label>
+          <input type="text" class="form-input" id="reg-name" placeholder="e.g. Rahul Sharma" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reg-email">Email Address</label>
+          <input type="email" class="form-input" id="reg-email" placeholder="e.g. rahul@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Password (minimum 6 characters)</label>
+          <input type="password" class="form-input" id="reg-password" placeholder="••••••••" minlength="6" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" id="btn-submit-register">
+          Create Eco Account
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ==================== TOAST CONTAINER ==================== -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script src="js/api.js"></script>
+  <script src="js/scale.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
